@@ -9,10 +9,12 @@
 
 <style type="text/css">
 	.btn{
+		display: inline-block;
 		width: 70px;
 		height: 20px;
 		text-align: center;
-		padding:0px;		
+		padding:0px;
+		margin-right:5px;
 	}
 	.btn a{
 		display: block;
@@ -83,12 +85,12 @@
 								<a href="javascript:exe()">
 									로그인
 								</a>
-							</p>
+							</p>	
 							<p class="btn">
 								<a href="registry.jsp">
 									회원가입
 								</a>
-							</p>							
+							</p>						
 						</td>
 					</tr>
 				</tbody>
@@ -109,6 +111,9 @@
 		</p>
 		<p class="btn">
 			<a href="memoList.jsp">메모장</a>
+		</p>
+		<p class="btn">
+			<a href="myDisk.jsp">메모장</a>
 		</p>
 	</div>
 <%  } //if문의 끝 %>	

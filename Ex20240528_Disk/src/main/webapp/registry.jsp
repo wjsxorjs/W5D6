@@ -241,8 +241,6 @@
 						data: param,
 					}).done(function(res){
 						// alert("저장 성공");
-						$("#my_win").html(res.trim());
-						$("#my_win").dialog();
 						$("#s_id").val("");
 						$("#s_pw").val("");
 						$("#s_name").val("");
@@ -250,6 +248,17 @@
 						$(".phone")[0].value="";
 						$(".phone")[1].value="";
 						$(".phone")[2].value="";
+
+						
+						$("#my_win").html(res.trim());
+						$("#my_win").dialog({
+							buttons: {
+								"확인": function() {
+									$( this ).dialog( "close" );
+									$(this).click(location.href = "index.jsp");
+								}
+							}
+						});
 						
 					}).fail(function(res){
 						alert("저장 실패");
