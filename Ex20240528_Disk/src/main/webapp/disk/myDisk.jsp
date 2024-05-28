@@ -344,6 +344,21 @@
 		// $("#f_win").dialog("close");
 	}
 	
+	function newFolder(){
+		// let name = document.getElementByID("f_name").value;
+		
+		let name = document.frm.f_name.value;
+		if(name.trim().length<1){
+			alert("폴더명을 입력하세요.");
+			document.frm.f_name.value = "";
+			document.frm.f_name.focus();
+			return;
+		}
+		document.frm.submit(); // 서버로 보낸다.(makeFolder.jsp)
+	}
+	
+	
+	
 </script>	
 </body>
 </html>
