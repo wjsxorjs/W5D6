@@ -257,11 +257,11 @@
 				<td>
 
 					<%if(f.isDirectory()){ %>
-					<a href="javascript: gogo('')">
+					<a href="javascript: gogo('<%=f.getName() %>')">
 						<%=f.getName() %>
 					</a>
 					<%} else{ %>
-					<a href="javascript:down('')">
+					<a href="javascript:down('<%=f.getName() %>')">
 						<%=f.getName() %>
 					</a>
 					<%} %>
@@ -278,13 +278,13 @@
 	
 	<form name="ff" method="post">
 		<input type="hidden" name="f_name"/>
-		<input type="hidden" name="cPath" value=""/>
+		<input type="hidden" name="cPath" value="<%=dir %>"/>
 	</form>
 	
 	
 	<div id="f_win">
 		<form action="makeFolder.jsp" method="post" name="frm">
-			<input type="hidden" name="cPath" value=""/>
+			<input type="hidden" name="cPath" value="<%=dir %>"/>
 			<label for="f_name">폴더명:</label>
 			<input type="text" id="f_name" name="f_name"/><br/>
 			<p class="btn">
@@ -303,7 +303,48 @@
 
 	
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+	function gogo(fname){
+		// 현재 문서 안에 이름이 ff인 form객체를 선택하고 그 안에 있는
+		//  이름이 f_name이라는 객체에 값으로 인자오 받은 fname을 저장한다.
+		document.ff.f_name.value = fname;
 		
+		//ff라는 폼의 action 지정
+		document.ff.action = "myDisk.jsp";
+		
+		document.ff.submit();
+		
+		
+		// GET방식으로 호출하는 방법 
+		// location.href = "myDisk.jsp?cPath=<%=dir%>&f_name="+fname;
+	}
+	
+
+
+	function goUp(upPath){
+		document.ff.cPath.value = upPath;
+		document.ff.action = "myDisk.jsp";
+		document.ff.submit();
+		
+	}
+	
+	function makeFolder(){
+		let fwin = document.getElementById("f_win");
+
+		fwin.style.display = "block";
+
+		// $("#f_win").dialog();
+	}
+	
+	function closeWin(){
+		let fwin = document.getElementById("f_win");
+
+		fwin.style.display = "none";
+
+		// $("#f_win").dialog("close");
+	}
+	
+</script>	
 </body>
 </html>
 <%
