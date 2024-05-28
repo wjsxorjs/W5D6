@@ -188,7 +188,7 @@
 	<label for="dir">현재위치:</label>
 	<span id="dir"><%=dir %></span>
 	
-	<table summary="폴더의 내용을 표현하는 테이블">
+	<table id="t1" summary="폴더의 내용을 표현하는 테이블">
 		<colgroup>
 			<col width="50px"/>
 			<col width="*"/>
@@ -354,7 +354,26 @@
 			document.frm.f_name.focus();
 			return;
 		}
-		document.frm.submit(); // 서버로 보낸다.(makeFolder.jsp)
+		// document.frm.submit(); // 서버로 보낸다.(makeFolder.jsp)
+		
+
+		let path = "<%=dir%>";
+		
+		
+		let param = "cPath="+encodeURIComponent(path)+"&f_name="+encodeURIComponent(name);
+		
+		console.log(param);
+		
+		$.ajax({
+			url: "makeFolder.jsp",
+			type: "post",
+			data: param,
+		}).done(function(res){
+			alert("생성 완료!");
+			let fwin = document.getElementById("f_win");
+			fwin.style.display = "none";
+			$("#t1 tbody").html(res);
+		});
 	}
 	
 	
