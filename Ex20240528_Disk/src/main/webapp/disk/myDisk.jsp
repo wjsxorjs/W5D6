@@ -41,6 +41,31 @@
 	Object obj = session.getAttribute("mvo");
 	if(obj != null){
 		MemberVO mvo = (MemberVO) obj;
+		
+		// 현재 사용자가 보고자하는 현재 위치값(cPath)을 인자로 받는다.
+		String dir = request.getParameter("cPath");
+		
+		// 사용자가 폴더를 선택했을 경우라면 f_name이라는 파라미터도 받는다
+		String fname = request.getParameter("f_name");	
+
+		// index.jsp에서 들어온 경우 dir, fname에 null을 받는다.
+		if(dir == null){
+			// 현재 위치값을 받지 못한 경우. 무조건 해당 id로 지정
+			dir = mvo.getM_id();
+			String path = application.getRealPath("/members/"+dir);
+			File f = new File(path);
+			useSize = useSize(f); // 사용하고 있는 용량을 구해준다.
+		} else {
+			// 현재 영역은 MyDisk화면에서 원하는 폴더를 선택한 경우
+			if(fname!=null && fname.trim().length()>0){
+				dir = dir+"/"+fname;
+			}
+		}
+		
+		// 나중에 현재위치값을 잊어버리지 않기 위해 세션에 저장해두어라.
+		session.setAttribute("dir", dir); // 나중에 파일올리기 때 이용
+		
+		
 %>
 
 <!doctype html>
@@ -131,11 +156,11 @@
 			</tr>
 			<tr>
 				<th class="title">사용량</th>
-				<td>KB</td>
+				<td><%=useSize/1024 %>KB</td>
 			</tr>
 			<tr>
 				<th class="title">남은용량</th>
-				<td>KB</td>
+				<td><%=(totalSize-useSize)/1024 %>KB</td>
 			</tr>
 		</tbody>
 	</table>
@@ -161,7 +186,7 @@
 	<hr/>
 	
 	<label for="dir">현재위치:</label>
-	<span id="dir"></span>
+	<span id="dir"><%=dir %></span>
 	
 	<table summary="폴더의 내용을 표현하는 테이블">
 		<colgroup>
@@ -177,38 +202,76 @@
 			</tr>
 		</thead>
 		<tbody>
-		
+		<%
+			// members폴더에서 로그인한 자신의 폴더를 최상위폴더로 지정
+			// 그 안에 있는 모든 파일 또는 디렉토리를 표현
+			// 현재위치(dir)의 내용과 사용자의 id가 같다면
+			// 아래의 [상위로...] 기능은 표현하지 않아야한다.
+			
+			if(!dir.equals(mvo.getM_id())){
+			// [상위로...] 기능 부여
+			// 예를 들어 현재 위치 값(dir)이 "test/abc/123"라고
+			// 가정하면 [상위로...] 기능은 "test/abc"의 위치를 의미한다.
+			
+			// 이를 위해서 현재 위치값에서 가장 뒤에 있는 "/"의 index를
+			// 얻어내어 맨 앞에서 그 index까지만 substring하면 된다.
+			int idx = dir.lastIndexOf("/");
+			String upPath = dir.substring(0,idx);
+			
+			
+			
+		%>
 			<tr>
 				<td>↑</td>
 				<td colspan="2">
-					<a href="javascript:goUp('')">
+					<a href="javascript:goUp('<%=upPath %>')">
 						상위로...
 					</a>
 				</td>
 				
 			</tr>
+		<% }
+			// 현재 위치의 하위내용을 출력하기 위해 현위치값을 통해
+			// 파일객체를 만들기 위해 절대경로를 필요하다.
+			
+			String realPath = application.getRealPath("/members/"+dir);
+			
+			File s_file = new File(realPath);
+			
+			File[] sub_list = s_file.listFiles();
+		
+		
+			for(File f: sub_list){
+		
+		%>
 
 			<tr>
 				<td>
-
+					<%if(f.isFile()){ %>
 						<img src="../images/file.png"/>
-
+					<%}else{ %>
 						<img src="../images/folder.png"/>
+					<%} %>
 
 				</td>
 				<td>
 
+					<%if(f.isDirectory()){ %>
 					<a href="javascript: gogo('')">
-						
+						<%=f.getName() %>
 					</a>
-
+					<%} else{ %>
 					<a href="javascript:down('')">
-						
+						<%=f.getName() %>
 					</a>
+					<%} %>
 				
 				</td>
 				<td></td>
 			</tr>
+		<% } // for문 끝
+		
+		%>
 
 		</tbody>
 	</table>
