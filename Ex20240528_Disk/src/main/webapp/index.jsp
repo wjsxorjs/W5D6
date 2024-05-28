@@ -108,12 +108,12 @@
 		<p>(<%=vo.getM_name() %>)님 환영</p>
 		<p class="btn">
 			<a href="logout.jsp">로그아웃</a>
-		</p>
+		</p><br/>
 		<p class="btn">
 			<a href="memoList.jsp">메모장</a>
-		</p>
+		</p><br/>
 		<p class="btn">
-			<a href="myDisk.jsp">메모장</a>
+			<a href="disk/myDisk.jsp">MyDisk</a>
 		</p>
 	</div>
 <%  } //if문의 끝 %>	
