@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memo">
+
+<!-- 로그인 -->
+<select id="all" resultType="mybatis.vo.MemoVO">
+	SELECT *
+	FROM memo_t
+	ORDER BY m_idx DESC;
+</select>
+
+
+<insert id="add" parameterType="Map">
+	INSERT
+	INTO memo_t(`content`,`writer`,`ip`,`write_date`)
+	VALUES(#{content},#{writer},#{ip}, now())
+</insert>
+
+</mapper>
